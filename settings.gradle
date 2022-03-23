@@ -1,4 +1,6 @@
-rootProject.name = "YIM-SDK"
+rootProject.name = "YLink"
 
 
 include ':demo'
+include ':library_core'
+include ':library_ui'

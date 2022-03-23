@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.protobuf'
 }
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -12,17 +13,13 @@ android {
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId 'com.shzd.eyuangame'
+        applicationId 'com.ylink.demo'
 
         minSdk rootProject.ext.android.minSdk
         targetSdk rootProject.ext.android.targetSdk
         versionCode 1
         versionName '0.0.1'
         multiDexEnabled true
-    }
-
-    buildFeatures {
-        buildConfig false
     }
     signingConfigs {
         config {
@@ -34,13 +31,15 @@ android {
             v2SigningEnabled true
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         debug {
             minifyEnabled false
             signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
         release {
             minifyEnabled false
             signingConfig signingConfigs.config
@@ -61,7 +60,63 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+
+
+    //gRPC dependencies
+    implementation "io.grpc:grpc-okhttp:$rootProject.grpc_version"
+    implementation "io.grpc:grpc-stub:$rootProject.grpc_version"
+
+    //stub-android
+    implementation "io.grpc:grpc-protobuf-lite:$rootProject.grpc_version"
+    implementation "io.grpc:grpc-kotlin-stub:$rootProject.grpc_kotlin_version"
+    implementation "com.google.protobuf:protobuf-kotlin-lite:$rootProject.protobuf_version"
+
+    implementation 'io.github.bbggo:lib-statusbar:1.0.1'
+
+    implementation project(':library_core')
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$rootProject.protobuf_version"
+    }
+    plugins {
+        java {
+            artifact = "io.grpc:protoc-gen-grpc-java:$rootProject.grpc_version"
+        }
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:$rootProject.grpc_version"
+        }
+        grpckt {
+            artifact = "io.grpc:protoc-gen-grpc-kotlin:$rootProject.grpc_kotlin_version:jdk7@jar"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                java {
+                    option "lite"
+                }
+                grpc {
+                    option "lite"
+                }
+                grpckt {
+                    option "lite"
+                }
+            }
+            it.builtins {
+                kotlin {
+                    option "lite"
+                }
+            }
+        }
+    }
 }

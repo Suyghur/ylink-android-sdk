@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/ylink_appbar_bg"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="YLink-Demo"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/main_btn_guest"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/ylink_btn_green_blue_white"
+        android:text="00 游客登录"
+        android:textColor="@color/ylink_color_green_blue"
+        android:textSize="16sp" />
+
+
+    <EditText
+        android:id="@+id/main_et_uid"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/ylink_et_full_frame_normal_bg"
+        android:hint="请输入玩家uid"
+        android:padding="5dp"
+        android:textColor="@color/ylink_color_gray"
+        android:textColorHint="@color/ylink_color_light_gray"
+        android:textSize="16sp" />
+
+
+    <EditText
+        android:id="@+id/main_et_gameid"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/ylink_et_full_frame_normal_bg"
+        android:hint="请输入游戏id"
+        android:padding="5dp"
+        android:textColor="@color/ylink_color_gray"
+        android:textColorHint="@color/ylink_color_light_gray"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/main_btn_user"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/ylink_btn_green_blue_white"
+        android:text="01 玩家登陆"
+        android:textColor="@color/ylink_color_green_blue"
+        android:textSize="16sp" />
+
+
+</LinearLayout>

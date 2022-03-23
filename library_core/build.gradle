@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk rootProject.ext.android.compileSdk
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    ndkVersion rootProject.ext.android.ndkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.android.minSdk
+        targetSdk rootProject.ext.android.targetSdk
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        buildConfig false
+    }
+    lintOptions {
+        abortOnError false
+    }
+    compileOptions {
+        kotlinOptions.freeCompilerArgs += ['-module-name', "cn.yyxx.ylink.core"]
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
+    implementation 'io.github.suyghur.dolin:zap:1.0.0'
+
+}
