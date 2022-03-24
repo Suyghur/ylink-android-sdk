@@ -12,7 +12,7 @@ import java.lang.reflect.Array
  * Created on 2022/03/22
  */
 object Logger {
-    private const val TAG: String = "yim_sdk"
+    private const val TAG: String = "ylink_sdk"
 
     private var hasZapInit = false
 

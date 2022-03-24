@@ -3,7 +3,7 @@ syntax = "proto3";
 package pb;
 
 option java_multiple_files = true;
-option java_package = "com.yyxx.yim.demo.grpc";
+option java_package = "com.ylink.demo.grpc";
 option java_outer_classname = "MessageProto";
 
 import "commands.proto";

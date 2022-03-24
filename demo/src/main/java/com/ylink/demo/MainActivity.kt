@@ -3,14 +3,14 @@ package com.ylink.demo
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
-import com.ylink.demo.api.BaseActivity
+import com.gyf.immersionbar.ImmersionBar
 import com.ylink.demo.databinding.ActivityMainBinding
 
 /**
  * @author #Suyghur.
  * Created on 2022/03/22
  */
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -23,6 +23,7 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        ImmersionBar.with(this).titleBar(binding.mainBarLayout).keyboardEnable(true).transparentStatusBar().init()
 
         binding.mainBtnGuest.setOnClickListener {
             guestModel = true
