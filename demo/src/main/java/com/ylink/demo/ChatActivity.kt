@@ -7,25 +7,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cn.yyxx.ylink.core.utils.Logger
 import com.gyf.immersionbar.ImmersionBar
 import com.ylink.demo.adapter.MessageItemAdapter
-import com.ylink.demo.api.CallApiService
+import com.ylink.demo.api.RpcbffApiService
 import com.ylink.demo.bean.MessageItemBean
 import com.ylink.demo.databinding.ActivityChatBinding
-import com.ylink.demo.grpc.ClientMsgRes
-import com.ylink.demo.grpc.ECommand
+import com.ylink.demo.grpc.CommandResp
 import com.ylink.demo.widget.SpaceItemDecoration
 import io.grpc.stub.StreamObserver
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
-    private val apiService by lazy { CallApiService() }
+    private val apiService by lazy { RpcbffApiService() }
     private var userId = ""
     private var gmId = ""
 
@@ -50,21 +48,19 @@ class ChatActivity : AppCompatActivity() {
 
         initView()
 
-        apiService.connect(object : StreamObserver<ClientMsgRes> {
-            override fun onNext(value: ClientMsgRes?) {
+        apiService.create(object : StreamObserver<CommandResp> {
+            override fun onNext(value: CommandResp?) {
                 value?.apply {
-                    val commandMsg = getCmd(0)
                     Logger.d(this.toString())
-                    Logger.d(commandMsg.cmdType)
-                    when (commandMsg.cmdType) {
-                        ECommand.SEND_MSG -> {
-                            messageList.add(MessageItemBean(0, commandMsg.chatMsg.input))
-                            mAdapter.notifyDataSetChanged()
-                        }
-                        ECommand.ON_PLAYER_CONNECT -> userId = commandMsg.cmdStr
-                        ECommand.ON_PLAYER_RECEIVE_REPLY -> gmId = commandMsg.cmdStr
-//                        ECommand.CALL_PLAYER_MSG->
-                    }
+//                    when (commandMsg.cmdType) {
+//                        ECommand.SEND_MSG -> {
+//                            messageList.add(MessageItemBean(0, commandMsg.chatMsg.input))
+//                            mAdapter.notifyDataSetChanged()
+//                        }
+//                        ECommand.ON_PLAYER_CONNECT -> userId = commandMsg.cmdStr
+//                        ECommand.ON_PLAYER_RECEIVE_REPLY -> gmId = commandMsg.cmdStr
+////                        ECommand.CALL_PLAYER_MSG->
+//                    }
                 }
             }
 
@@ -75,7 +71,7 @@ class ChatActivity : AppCompatActivity() {
             }
         })
         lifecycleScope.launch(Dispatchers.IO) {
-            apiService.login()
+            apiService.connect()
         }
     }
 
@@ -95,21 +91,23 @@ class ChatActivity : AppCompatActivity() {
         }
 
         binding.chatBtnSend.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val msg = binding.chatEtInput.text.toString()
-                apiService.send(msg, userId, gmId)
-                withContext(Dispatchers.Main) {
-                    binding.chatEtInput.setText("")
-                    messageList.add(MessageItemBean(1, msg))
-                    mAdapter.notifyDataSetChanged()
-                }
-            }
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                val msg = binding.chatEtInput.text.toString()
+//                apiService.send(msg, userId, gmId)
+//                withContext(Dispatchers.Main) {
+//                    binding.chatEtInput.setText("")
+//                    messageList.add(MessageItemBean(1, msg))
+//                    mAdapter.notifyDataSetChanged()
+//                }
+//            }
         }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        apiService.disConnect()
+        CoroutineScope(Dispatchers.IO).launch {
+            apiService.disconnect()
+        }
     }
 }

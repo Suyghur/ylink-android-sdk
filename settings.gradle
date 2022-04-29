@@ -1,4 +1,4 @@
-rootProject.name = "YLink"
+rootProject.name = "ylink_android"
 
 
 include ':demo'
