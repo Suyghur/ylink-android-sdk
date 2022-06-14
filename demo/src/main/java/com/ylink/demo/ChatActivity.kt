@@ -1,78 +1,70 @@
 package com.ylink.demo
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import cn.yyxx.ylink.core.YLinkSdk
 import cn.yyxx.ylink.core.utils.Logger
+import cn.yyxx.ylink.ui.adapter.MessageItemAdapter
+import cn.yyxx.ylink.ui.entity.MessageBean
+import com.alibaba.android.arouter.facade.annotation.Autowired
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.gyf.immersionbar.ImmersionBar
-import com.ylink.demo.adapter.MessageItemAdapter
-import com.ylink.demo.api.RpcbffApiService
-import com.ylink.demo.bean.MessageItemBean
 import com.ylink.demo.databinding.ActivityChatBinding
-import com.ylink.demo.grpc.CommandResp
-import com.ylink.demo.widget.SpaceItemDecoration
-import io.grpc.stub.StreamObserver
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
+@Route(path = "/main/chat")
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
-    private val apiService by lazy { RpcbffApiService() }
-    private var userId = ""
-    private var gmId = ""
 
-    private val messageList = mutableListOf<MessageItemBean>()
+    @JvmField
+    @Autowired(name = "type")
+    var type = 0
 
-    private val mAdapter: MessageItemAdapter by lazy {
-        MessageItemAdapter(messageList)
+    @JvmField
+    @Autowired(name = "access_token")
+    var accessToken = ""
+
+    private val messageList by lazy {
+        mutableListOf<MessageBean>()
     }
 
-    companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, ChatActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
+    private val messageItemAdapter: MessageItemAdapter by lazy {
+        MessageItemAdapter(messageList)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         ImmersionBar.with(this).titleBar(binding.chatBarLayout).keyboardEnable(true).transparentStatusBar().init()
-
+        ARouter.getInstance().inject(this)
+        Logger.d("type: $type")
+        Logger.d("accessToken: $accessToken")
         initView()
 
-        apiService.create(object : StreamObserver<CommandResp> {
-            override fun onNext(value: CommandResp?) {
-                value?.apply {
-                    Logger.d(this.toString())
-//                    when (commandMsg.cmdType) {
-//                        ECommand.SEND_MSG -> {
-//                            messageList.add(MessageItemBean(0, commandMsg.chatMsg.input))
-//                            mAdapter.notifyDataSetChanged()
+//        YLinkSdk.getInstance().connect(
+//            this,
+//            0L,
+//            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxMTA1NDcsImdhbWVfaWQiOiJnYW1lXzEyMzEiLCJpYXQiOjE2NTQ1MDU3NDcsInBsYXllcl9pZCI6InBsYXllcl8zMzMzIn0.WX5ubKbxKJhVMbvheb8E2uQNy8TeB5JG71BggUccMlc",
+//            object : ICallback {
+//                override fun onResult(code: Int, result: String) {
+////                    messageList.add()
+//                    Logger.d("code: $code, result: $result")
+//                    if (code == 0) {
+//                        val message = Gson().fromJson(result, MessageBean::class.java)
+//                        message.itemType = if (message.uid == playerId) {
+//                            0
+//                        } else {
+//                            1
 //                        }
-//                        ECommand.ON_PLAYER_CONNECT -> userId = commandMsg.cmdStr
-//                        ECommand.ON_PLAYER_RECEIVE_REPLY -> gmId = commandMsg.cmdStr
-////                        ECommand.CALL_PLAYER_MSG->
+//                        messageList.add(message)
+//                        messageItemAdapter.notifyDataSetChanged()
 //                    }
-                }
-            }
-
-            override fun onError(t: Throwable?) {
-            }
-
-            override fun onCompleted() {
-            }
-        })
-        lifecycleScope.launch(Dispatchers.IO) {
-            apiService.connect()
-        }
+//                }
+//            })
     }
 
     private fun initView() {
@@ -85,29 +77,33 @@ class ChatActivity : AppCompatActivity() {
 
         binding.chatRecyclerView.run {
             layoutManager = LinearLayoutManager(this@ChatActivity)
-            adapter = mAdapter
+            adapter = messageItemAdapter
             itemAnimator = DefaultItemAnimator()
-            addItemDecoration(SpaceItemDecoration(this@ChatActivity))
+//            addItemDecoration(SpaceItemDecoration(this@ChatActivity))
         }
 
         binding.chatBtnSend.setOnClickListener {
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                val msg = binding.chatEtInput.text.toString()
-//                apiService.send(msg, userId, gmId)
-//                withContext(Dispatchers.Main) {
-//                    binding.chatEtInput.setText("")
-//                    messageList.add(MessageItemBean(1, msg))
-//                    mAdapter.notifyDataSetChanged()
-//                }
-//            }
-        }
+            val content = binding.chatEtInput.text.toString()
+//            messageList.add(
+//                MessageBean(
+//                    createTime = "2022-06-10 16:52:49",
+//                    content = content,
+//                    pic = "",
+//                    receiverId = csId,
+//                    senderId = "${gameId}_$playerId",
+//                    gameId = gameId,
+//                    uid = playerId,
+//                    itemType = 0
+//                )
+//            )
+            messageItemAdapter.notifyDataSetChanged()
+            binding.chatEtInput.setText("")
 
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        CoroutineScope(Dispatchers.IO).launch {
-            apiService.disconnect()
-        }
+        YLinkSdk.getInstance().disconnect()
     }
 }

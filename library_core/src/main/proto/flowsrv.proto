@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "cn.yyxx.ylink.core.network.rpc";
+option java_outer_classname = "FlowsrvProto";
+
+package pb;
+
+import "google/protobuf/struct.proto";
+
+message CommandReq {
+  int32 type = 1;
+  string access_token = 2;
+}
+
+message CommandResp {
+  int32 code = 1;
+  string  msg = 2;
+  bytes data = 3;
+}
+
+service Flowsrv {
+  rpc connect(CommandReq) returns (stream CommandResp);
+}

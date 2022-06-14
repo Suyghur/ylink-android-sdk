@@ -21,6 +21,7 @@ android {
     }
     buildFeatures {
         buildConfig false
+        viewBinding true
     }
     lintOptions {
         abortOnError false
@@ -40,4 +41,9 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    compileOnly project(':library_core')
 }

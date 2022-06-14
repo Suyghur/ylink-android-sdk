@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/main_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:id="@+id/main_bar_layout"
         android:background="@drawable/ylink_appbar_bg"
         android:gravity="center">
 
@@ -21,53 +20,65 @@
             android:textSize="18sp" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-        android:id="@+id/main_btn_guest"
-        style="?android:attr/borderlessButtonStyle"
+    <EditText
+        android:id="@+id/main_et_game_id"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/ylink_btn_green_blue_white"
-        android:text="00 游客登录"
-        android:textColor="@color/ylink_color_green_blue"
+        android:background="@drawable/ylink_et_full_frame_normal_bg"
+        android:gravity="top|left"
+        android:hint="输入game_id(客服可为空)"
+        android:padding="5dp"
+        android:text="game_1231"
+        android:textColor="@color/ylink_color_gray"
+        android:textColorHint="@color/ylink_color_light_gray"
         android:textSize="16sp" />
-
 
     <EditText
         android:id="@+id/main_et_uid"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/ylink_et_full_frame_normal_bg"
-        android:hint="请输入玩家uid"
+        android:gravity="top|left"
+        android:hint="输入uid"
         android:padding="5dp"
+        android:text="player_1231"
         android:textColor="@color/ylink_color_gray"
         android:textColorHint="@color/ylink_color_light_gray"
         android:textSize="16sp" />
 
-
-    <EditText
-        android:id="@+id/main_et_gameid"
+    <Button
+        android:id="@+id/main_btn_guest"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/ylink_et_full_frame_normal_bg"
-        android:hint="请输入游戏id"
-        android:padding="5dp"
-        android:textColor="@color/ylink_color_gray"
-        android:textColorHint="@color/ylink_color_light_gray"
+        android:background="@drawable/ylink_btn_green_blue_white"
+        android:text="00 普通玩家连接"
+        android:textColor="@color/ylink_color_green_blue"
         android:textSize="16sp" />
 
     <Button
         android:id="@+id/main_btn_user"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/ylink_btn_green_blue_white"
-        android:text="01 玩家登陆"
+        android:text="01 vip玩家连接"
         android:textColor="@color/ylink_color_green_blue"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/main_btn_cs"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/ylink_btn_green_blue_white"
+        android:text="02 客服连接"
+        android:textColor="@color/ylink_color_green_blue"
+        android:textSize="16sp" />
 
 </LinearLayout>

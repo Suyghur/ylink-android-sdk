@@ -66,7 +66,7 @@ object Logger {
 
     @JvmStatic
     fun e(any: Any?) {
-        d(TAG, any)
+        e(TAG, any)
     }
 
     @JvmStatic

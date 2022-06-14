@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.protobuf'
+    id 'kotlin-kapt'
 }
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -14,12 +14,18 @@ android {
 
     defaultConfig {
         applicationId 'com.ylink.demo'
-
         minSdk rootProject.ext.android.minSdk
         targetSdk rootProject.ext.android.targetSdk
         versionCode 1
         versionName '0.0.1'
         multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        AROUTER_MODULE_NAME: project.getName()
+                ]
+            }
+        }
     }
     signingConfigs {
         config {
@@ -59,68 +65,31 @@ android {
     }
 }
 
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    //gRPC dependencies
-    implementation "io.grpc:grpc-okhttp:$rootProject.grpc_version"
-    implementation "io.grpc:grpc-stub:$rootProject.grpc_version"
-
-    //stub-android
-    implementation "io.grpc:grpc-protobuf-lite:$rootProject.grpc_version"
-    implementation "io.grpc:grpc-kotlin-stub:$rootProject.grpc_kotlin_version"
-    implementation "com.google.protobuf:protobuf-kotlin-lite:$rootProject.protobuf_version"
-
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.1'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+
+    implementation 'com.alibaba:arouter-api:1.5.2'
+    kapt 'com.alibaba:arouter-compiler:1.5.2'
 
     implementation project(':library_core')
     implementation project(':library_ui')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
-}
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:$rootProject.protobuf_version"
-    }
-    plugins {
-        java {
-            artifact = "io.grpc:protoc-gen-grpc-java:$rootProject.grpc_version"
-        }
-        grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:$rootProject.grpc_version"
-        }
-        grpckt {
-            artifact = "io.grpc:protoc-gen-grpc-kotlin:$rootProject.grpc_kotlin_version:jdk7@jar"
-        }
-    }
-    generateProtoTasks {
-        all().forEach {
-            it.plugins {
-                java {
-                    option "lite"
-                }
-                grpc {
-                    option "lite"
-                }
-                grpckt {
-                    option "lite"
-                }
-            }
-            it.builtins {
-                kotlin {
-                    option "lite"
-                }
-            }
-        }
-    }
 }

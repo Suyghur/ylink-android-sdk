@@ -6,6 +6,12 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import cn.yyxx.ylink.core.utils.Logger
+import okhttp3.OkHttpClient
+import rxhttp.RxHttpPlugins
+import rxhttp.wrapper.ssl.HttpsUtils
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLSession
 
 /**
  * @author #Suyghur.
